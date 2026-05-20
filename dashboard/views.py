@@ -15,6 +15,7 @@ from django.contrib.auth import logout
 from django.views.decorators.csrf import csrf_exempt
 
 
+
 def home(request):
 
     total_configs = (
@@ -167,7 +168,7 @@ def save_config(request):
             "channel_name"
         )
 
-        ChannelConfig.objects.create(
+        ChannelConfig.objects.get_or_create(
 
             guild_id=guild_id,
 
@@ -332,3 +333,21 @@ def messages_page(request):
         }
     )
 
+def get_channels(request, guild_id):
+    # TODO:
+    # Replace temporary channel mapping
+    # with real Discord API channel fetching
+
+    channels = [
+
+        {
+            "id": "1506591836020412589",
+            "name": "test"
+        }
+
+    ]
+
+    return JsonResponse(
+        channels,
+        safe=False
+    )

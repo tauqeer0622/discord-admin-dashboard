@@ -12,7 +12,8 @@ from .views import (
     toggle_config,
     logout_view,
     message_webhook,
-    messages_page
+    messages_page,
+    get_channels
 )
 
 urlpatterns = [
@@ -80,5 +81,10 @@ urlpatterns = [
         "messages/",
         messages_page,
         name="messages_page"
+    ),
+    path(
+        "api/channels/<str:guild_id>/",
+        get_channels,
+        name="get_channels"
     ),
     ]

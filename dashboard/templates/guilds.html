@@ -6,7 +6,7 @@
 <head>
 
     <title>
-        Guild Selection
+        Discord Admin Dashboard
     </title>
 
     <link
@@ -21,100 +21,107 @@
     <div class="navbar">
 
         <a
-            class="nav-link"
             href="/"
+            class="nav-link"
         >
             Dashboard
         </a>
 
         <a
-            class="nav-link"
             href="/configs/"
+            class="nav-link"
         >
             Configurations
         </a>
 
         <a
-            class="nav-link"
             href="/admin/"
+            class="nav-link"
         >
             Admin
         </a>
 
     </div>
 
-    <h1>
-        Add Configuration
-    </h1>
+    <div class="container">
 
-    <div class="card">
+        <h1>
+            Add Configuration
+        </h1>
 
-        <form method="POST" action="/save-config/">
+        <form
+            method="POST"
+            action="/save-config/"
+        >
 
             {% csrf_token %}
 
-            <label>
-                Select Server
-            </label>
+            <div class="card">
 
-            <select
-                id="guild-dropdown"
-                name="guild_id"
-            >
-
-                <option value="">
+                <label>
                     Select Server
-                </option>
+                </label>
 
-                {% for guild in guilds %}
-
-                <option
-                    value="{{ guild.id }}"
-                    data-name="{{ guild.name }}"
+                <select
+                    id="serverDropdown"
+                    name="guild_id"
+                    required
                 >
 
-                    {{ guild.name }}
+                    {% for guild in guilds %}
 
-                </option>
+                    <option
+                        value="{{ guild.id }}"
+                        data-name="{{ guild.name }}"
+                    >
 
-                {% endfor %}
+                        {{ guild.name }}
 
-            </select>
+                    </option>
 
-            <input
-                type="hidden"
-                name="guild_name"
-                id="guild-name"
-            >
+                    {% endfor %}
 
-            <label>
-                Select Channel
-            </label>
+                </select>
 
-            <select
-                id="channel-dropdown"
-                name="channel_id"
-            >
+                <br><br>
 
-                <option value="">
+                <label>
                     Select Channel
-                </option>
+                </label>
 
-            </select>
+                <select
+                    id="channelDropdown"
+                    name="channel_id"
+                    required
+                >
 
-            <input
-                type="hidden"
-                name="channel_name"
-                id="channel-name"
-            >
+                    <option>
+                        Select Server First
+                    </option>
 
-            <br>
+                </select>
 
-            <button type="submit">
+                <input
+                    type="hidden"
+                    name="guild_name"
+                    id="guildNameInput"
+                >
 
-                Save Configuration
+                <input
+                    type="hidden"
+                    name="channel_name"
+                    id="channelNameInput"
+                >
 
-            </button>
+                <br><br>
+
+                <button type="submit">
+
+                    Save Configuration
+
+                </button>
+
+            </div>
 
         </form>
 
@@ -122,97 +129,101 @@
 
     <script>
 
-        const guildDropdown = document.getElementById(
-            "guild-dropdown"
-        )
+        const serverDropdown =
+            document.getElementById(
+                "serverDropdown"
+            )
 
-        const channelDropdown = document.getElementById(
-            "channel-dropdown"
-        )
+        const channelDropdown =
+            document.getElementById(
+                "channelDropdown"
+            )
 
-        const guildNameInput = document.getElementById(
-            "guild-name"
-        )
+        const guildNameInput =
+            document.getElementById(
+                "guildNameInput"
+            )
 
-        const channelNameInput = document.getElementById(
-            "channel-name"
-        )
+        const channelNameInput =
+            document.getElementById(
+                "channelNameInput"
+            )
 
-        guildDropdown.addEventListener(
-            "change",
-            async function () {
+        async function loadChannels() {
 
-                const guildName =
-                    this.options[
-                        this.selectedIndex
-                    ].dataset.name
+            const guildId =
+                serverDropdown.value
 
-                guildNameInput.value =
-                    guildName
+            const guildName =
+                serverDropdown.options[
+                    serverDropdown.selectedIndex
+                ].dataset.name
 
-                channelDropdown.innerHTML =
-                    "<option>Loading...</option>"
+            guildNameInput.value =
+                guildName
 
-                channelNameInput.value = ""
+            channelDropdown.innerHTML =
+                "<option>Loading...</option>"
 
-                // MOCK CHANNEL DATA
+            const response =
+                await fetch(
+                    `/api/channels/${guildId}/`
+                )
 
-                const channels = [
+            const channels =
+                await response.json()
 
-                    {
-                        channel_name: "general",
-                        channel_id: "111111"
-                    },
+            channelDropdown.innerHTML = ""
 
-                    {
-                        channel_name: "trading",
-                        channel_id: "222222"
-                    },
+            channels.forEach(channel => {
 
-                    {
-                        channel_name: "signals",
-                        channel_id: "333333"
-                    }
-                ]
-
-                channelDropdown.innerHTML = ""
-
-                channels.forEach(channel => {
-
-                    const option =
-                        document.createElement(
-                            "option"
-                        )
-
-                    option.value =
-                        channel.channel_id
-
-                    option.textContent =
-                        channel.channel_name
-
-                    option.dataset.name =
-                        channel.channel_name
-
-                    channelDropdown.appendChild(
-                        option
+                const option =
+                    document.createElement(
+                        "option"
                     )
-                })
+
+                option.value =
+                    channel.id
+
+                option.textContent =
+                    channel.name
+
+                option.dataset.name =
+                    channel.name
+
+                channelDropdown.appendChild(
+                    option
+                )
+            })
+
+            if (channels.length > 0) {
+
+                channelNameInput.value =
+                    channels[0].name
             }
-        )
+        }
 
         channelDropdown.addEventListener(
             "change",
+
             function () {
 
-                const channelName =
-                    this.options[
-                        this.selectedIndex
-                    ].dataset.name
+                const selectedOption =
+                    channelDropdown.options[
+                        channelDropdown.selectedIndex
+                    ]
 
                 channelNameInput.value =
-                    channelName
+                    selectedOption.dataset.name
             }
         )
+
+        serverDropdown.addEventListener(
+            "change",
+            loadChannels
+        )
+
+        window.onload = loadChannels
 
     </script>
 
