@@ -1,0 +1,221 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>
+        Guild Selection
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'style.css' %}"
+    >
+
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <a
+            class="nav-link"
+            href="/"
+        >
+            Dashboard
+        </a>
+
+        <a
+            class="nav-link"
+            href="/configs/"
+        >
+            Configurations
+        </a>
+
+        <a
+            class="nav-link"
+            href="/admin/"
+        >
+            Admin
+        </a>
+
+    </div>
+
+    <h1>
+        Add Configuration
+    </h1>
+
+    <div class="card">
+
+        <form method="POST" action="/save-config/">
+
+            {% csrf_token %}
+
+            <label>
+                Select Server
+            </label>
+
+            <select
+                id="guild-dropdown"
+                name="guild_id"
+            >
+
+                <option value="">
+                    Select Server
+                </option>
+
+                {% for guild in guilds %}
+
+                <option
+                    value="{{ guild.id }}"
+                    data-name="{{ guild.name }}"
+                >
+
+                    {{ guild.name }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+            <input
+                type="hidden"
+                name="guild_name"
+                id="guild-name"
+            >
+
+            <label>
+                Select Channel
+            </label>
+
+            <select
+                id="channel-dropdown"
+                name="channel_id"
+            >
+
+                <option value="">
+                    Select Channel
+                </option>
+
+            </select>
+
+            <input
+                type="hidden"
+                name="channel_name"
+                id="channel-name"
+            >
+
+            <br>
+
+            <button type="submit">
+
+                Save Configuration
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <script>
+
+        const guildDropdown = document.getElementById(
+            "guild-dropdown"
+        )
+
+        const channelDropdown = document.getElementById(
+            "channel-dropdown"
+        )
+
+        const guildNameInput = document.getElementById(
+            "guild-name"
+        )
+
+        const channelNameInput = document.getElementById(
+            "channel-name"
+        )
+
+        guildDropdown.addEventListener(
+            "change",
+            async function () {
+
+                const guildName =
+                    this.options[
+                        this.selectedIndex
+                    ].dataset.name
+
+                guildNameInput.value =
+                    guildName
+
+                channelDropdown.innerHTML =
+                    "<option>Loading...</option>"
+
+                channelNameInput.value = ""
+
+                // MOCK CHANNEL DATA
+
+                const channels = [
+
+                    {
+                        channel_name: "general",
+                        channel_id: "111111"
+                    },
+
+                    {
+                        channel_name: "trading",
+                        channel_id: "222222"
+                    },
+
+                    {
+                        channel_name: "signals",
+                        channel_id: "333333"
+                    }
+                ]
+
+                channelDropdown.innerHTML = ""
+
+                channels.forEach(channel => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        )
+
+                    option.value =
+                        channel.channel_id
+
+                    option.textContent =
+                        channel.channel_name
+
+                    option.dataset.name =
+                        channel.channel_name
+
+                    channelDropdown.appendChild(
+                        option
+                    )
+                })
+            }
+        )
+
+        channelDropdown.addEventListener(
+            "change",
+            function () {
+
+                const channelName =
+                    this.options[
+                        this.selectedIndex
+                    ].dataset.name
+
+                channelNameInput.value =
+                    channelName
+            }
+        )
+
+    </script>
+
+</body>
+
+</html>

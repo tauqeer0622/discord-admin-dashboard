@@ -1,0 +1,122 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>
+        Discord Admin Dashboard
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'style.css' %}"
+    >
+
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <a
+            class="nav-link"
+            href="/"
+        >
+            Dashboard
+        </a>
+
+        <a
+            class="nav-link"
+            href="/configs/"
+        >
+            Configurations
+        </a>
+
+        <a
+            class="nav-link"
+            href="/admin/"
+        >
+            Admin
+        </a>
+
+    </div>
+
+    <h1>
+        Discord Admin Dashboard
+    </h1>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <h2>
+                {{ total_configs }}
+            </h2>
+
+            <p>
+                Total Configurations
+            </p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h2>
+                {{ active_configs }}
+            </h2>
+
+            <p>
+                Active Configurations
+            </p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h2>
+                {{ disabled_configs }}
+            </h2>
+
+            <p>
+                Disabled Configurations
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>
+            Quick Actions
+        </h2>
+
+        <br>
+
+        <a href="/login/">
+
+            <button>
+
+                Login with Discord
+
+            </button>
+
+        </a>
+
+        <a href="/configs/">
+
+            <button>
+
+                View Configurations
+
+            </button>
+
+        </a>
+
+    </div>
+
+</body>
+
+</html>

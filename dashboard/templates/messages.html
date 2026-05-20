@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>
+        Messages Dashboard
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'style.css' %}"
+    >
+
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <a class="nav-link" href="/">
+            Dashboard
+        </a>
+
+        <a class="nav-link" href="/configs/">
+            Configurations
+        </a>
+
+        <a class="nav-link" href="/messages/">
+            Messages
+        </a>
+
+    </div>
+
+    <h1>
+        Latest Scraped Messages
+    </h1>
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+        <div class="card">
+
+            <h3>
+                {{ message.source_label }}
+            </h3>
+
+            <p>
+
+                <strong>
+                    {{ message.author }}
+                </strong>
+
+            </p>
+
+            <p>
+                {{ message.content }}
+            </p>
+
+            <small>
+                {{ message.timestamp }}
+            </small>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="card">
+
+            No messages fetched yet
+
+        </div>
+
+    {% endif %}
+
+</body>
+
+</html>
