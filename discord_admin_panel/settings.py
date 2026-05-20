@@ -140,3 +140,7 @@ DISCORD_REDIRECT_URI = os.getenv(
 )
 
 LOGIN_URL = "/admin/login/"
+
+DISCORD_USER_TOKEN = os.getenv(
+    "DISCORD_USER_TOKEN"
+)
