@@ -6,7 +6,7 @@
 <head>
 
     <title>
-        Discord Admin Dashboard
+        Discord Command Center
     </title>
 
     <link
@@ -20,210 +20,269 @@
 
     <div class="navbar">
 
-        <a
-            href="/"
-            class="nav-link"
-        >
-            Dashboard
-        </a>
+        <div class="logo">
 
-        <a
-            href="/configs/"
-            class="nav-link"
-        >
-            Configurations
-        </a>
+            Discord Command Center
 
-        <a
-            href="/admin/"
-            class="nav-link"
-        >
-            Admin
-        </a>
+        </div>
+
+        <div class="nav-items">
+
+            <a
+                href="/"
+                class="nav-link"
+            >
+                Dashboard
+            </a>
+
+            <a
+                href="/configs/"
+                class="nav-link active-link"
+            >
+                Configurations
+            </a>
+
+            <a
+                href="/messages/"
+                class="nav-link"
+            >
+                Messages
+            </a>
+
+            <a
+                href="/admin/"
+                class="nav-link"
+            >
+                Admin
+            </a>
+
+        </div>
 
     </div>
 
     <div class="container">
 
-        <h1>
+        <h1 class="page-title">
+
             Add Configuration
+
         </h1>
 
-        <form
-            method="POST"
-            action="/save-config/"
-        >
+        <div class="form-card">
 
-            {% csrf_token %}
+            <form method="POST">
 
-            <div class="card">
+                {% csrf_token %}
 
-                <label>
-                    Select Server
-                </label>
+                <div class="form-grid">
 
-                <select
-                    id="serverDropdown"
-                    name="guild_id"
-                    required
-                >
+                    <div>
 
-                    {% for guild in guilds %}
+                        <label>
 
-                    <option
-                        value="{{ guild.id }}"
-                        data-name="{{ guild.name }}"
+                            Select Server
+
+                        </label>
+
+                        <select
+                            id="serverDropdown"
+                            name="guild_id"
+                        >
+
+                            {% for guild in guilds %}
+
+                            <option
+                                value="{{ guild.id }}"
+                                data-name="{{ guild.name }}"
+                            >
+
+                                {{ guild.name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <div>
+
+                        <label>
+
+                            Select Channel
+
+                        </label>
+
+                        <select
+                            id="channelDropdown"
+                            name="channel_id"
+                            required
+                        >
+
+                            <option>
+
+                                Loading...
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <input
+                        type="hidden"
+                        name="guild_name"
+                        id="guildNameInput"
                     >
 
-                        {{ guild.name }}
+                    <input
+                        type="hidden"
+                        name="channel_name"
+                        id="channelNameInput"
+                    >
 
-                    </option>
+                </div>
 
-                    {% endfor %}
+                <div class="button-row">
 
-                </select>
+                    <button type="submit">
 
-                <br><br>
+                        Save Configuration
 
-                <label>
-                    Select Channel
-                </label>
+                    </button>
 
-                <select
-                    id="channelDropdown"
-                    name="channel_id"
-                    required
-                >
+                </div>
 
-                    <option>
-                        Select Server First
-                    </option>
+            </form>
 
-                </select>
-
-                <input
-                    type="hidden"
-                    name="guild_name"
-                    id="guildNameInput"
-                >
-
-                <input
-                    type="hidden"
-                    name="channel_name"
-                    id="channelNameInput"
-                >
-
-                <br><br>
-
-                <button type="submit">
-
-                    Save Configuration
-
-                </button>
-
-            </div>
-
-        </form>
+        </div>
 
     </div>
+
+    <footer>
+
+        © 2026 Discord Command Center.
+        All rights reserved.
+
+    </footer>
 
     <script>
 
         const serverDropdown =
             document.getElementById(
                 "serverDropdown"
-            )
+            );
 
         const channelDropdown =
             document.getElementById(
                 "channelDropdown"
-            )
+            );
 
         const guildNameInput =
             document.getElementById(
                 "guildNameInput"
-            )
+            );
 
         const channelNameInput =
             document.getElementById(
                 "channelNameInput"
-            )
+            );
 
         async function loadChannels() {
 
             const guildId =
-                serverDropdown.value
-
-            const guildName =
-                serverDropdown.options[
-                    serverDropdown.selectedIndex
-                ].dataset.name
+                serverDropdown.value;
 
             guildNameInput.value =
-                guildName
+                serverDropdown.options[
+                    serverDropdown.selectedIndex
+                ].dataset.name;
 
             channelDropdown.innerHTML =
-                "<option>Loading...</option>"
+                `<option>Loading...</option>`;
 
-            const response =
-                await fetch(
-                    `/api/channels/${guildId}/`
-                )
+            try {
 
-            const channels =
-                await response.json()
+                const response =
+                    await fetch(
 
-            channelDropdown.innerHTML = ""
+                        `https://curly-rice-kick.loca.lt/api/channels?guild_id=${guildId}`
 
-            channels.forEach(channel => {
+                    );
 
-                const option =
-                    document.createElement(
-                        "option"
-                    )
+                const channels =
+                    await response.json();
 
-                option.value =
-                    channel.id
+                channelDropdown.innerHTML =
+                    "";
 
-                option.textContent =
-                    channel.name
+                if (channels.error) {
 
-                option.dataset.name =
-                    channel.name
+                    channelDropdown.innerHTML =
+                        `<option>${channels.error}</option>`;
 
-                channelDropdown.appendChild(
-                    option
-                )
-            })
+                    return;
+                }
 
-            if (channels.length > 0) {
+                channels.forEach(channel => {
 
-                channelNameInput.value =
-                    channels[0].name
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+                    option.value =
+                        channel.channel_id;
+
+                    option.textContent =
+                        channel.channel_name;
+
+                    option.dataset.name =
+                        channel.channel_name;
+
+                    channelDropdown.appendChild(
+                        option
+                    );
+
+                });
+
+                if (
+                    channelDropdown.options.length > 0
+                ) {
+
+                    channelNameInput.value =
+                        channelDropdown.options[0]
+                        .dataset.name;
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                channelDropdown.innerHTML =
+                    `<option>Error loading channels</option>`;
             }
+
         }
-
-        channelDropdown.addEventListener(
-            "change",
-
-            function () {
-
-                const selectedOption =
-                    channelDropdown.options[
-                        channelDropdown.selectedIndex
-                    ]
-
-                channelNameInput.value =
-                    selectedOption.dataset.name
-            }
-        )
 
         serverDropdown.addEventListener(
             "change",
             loadChannels
-        )
+        );
 
-        window.onload = loadChannels
+        channelDropdown.addEventListener(
+            "change",
+            function () {
+
+                channelNameInput.value =
+                    this.options[
+                        this.selectedIndex
+                    ].dataset.name;
+            }
+        );
+
+        loadChannels();
 
     </script>
 

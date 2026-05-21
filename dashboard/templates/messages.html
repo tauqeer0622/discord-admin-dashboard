@@ -6,7 +6,7 @@
 <head>
 
     <title>
-        Messages Dashboard
+        Discord Messages
     </title>
 
     <link
@@ -20,63 +20,89 @@
 
     <div class="navbar">
 
-        <a class="nav-link" href="/">
+        <a
+            href="/"
+            class="nav-link"
+        >
             Dashboard
         </a>
 
-        <a class="nav-link" href="/configs/">
+        <a
+            href="/configs/"
+            class="nav-link"
+        >
             Configurations
         </a>
 
-        <a class="nav-link" href="/messages/">
+        <a
+            href="/messages/"
+            class="nav-link"
+        >
             Messages
+        </a>
+
+        <a
+            href="/admin/"
+            class="nav-link"
+        >
+            Admin
         </a>
 
     </div>
 
-    <h1>
-        Latest Scraped Messages
-    </h1>
+    <div class="container">
 
-    {% if messages %}
+        <h1>
+            Fetched Discord Messages
+        </h1>
 
         {% for message in messages %}
 
-        <div class="card">
+        <div class="message-card">
 
             <h3>
-                {{ message.source_label }}
+                {{ message.channel_name }}
             </h3>
-
-            <p>
-
-                <strong>
-                    {{ message.author }}
-                </strong>
-
-            </p>
 
             <p>
                 {{ message.content }}
             </p>
 
-            <small>
-                {{ message.timestamp }}
-            </small>
+            <div class="small-text">
+
+                <p>
+                    <strong>
+                        Author:
+                    </strong>
+
+                    {{ message.author }}
+                </p>
+
+                <p>
+                    <strong>
+                        Timestamp:
+                    </strong>
+
+                    {{ message.timestamp }}
+                </p>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="card">
+
+            <h3>
+                No messages fetched yet.
+            </h3>
 
         </div>
 
         {% endfor %}
 
-    {% else %}
-
-        <div class="card">
-
-            No messages fetched yet
-
-        </div>
-
-    {% endif %}
+    </div>
 
 </body>
 

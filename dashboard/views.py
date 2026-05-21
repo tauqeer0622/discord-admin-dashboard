@@ -110,13 +110,7 @@ def discord_callback(request):
 
     guilds = guilds_response.json()
     request.session["guilds"] = guilds
-    return render(
-        request,
-        "guilds.html",
-        {
-            "guilds": guilds
-        }
-    )
+    return redirect("/guilds/")
 
 def guild_channels(request, guild_id):
 
@@ -333,21 +327,72 @@ def messages_page(request):
         }
     )
 
-def get_channels(request, guild_id):
-    # TODO:
-    # Replace temporary channel mapping
-    # with real Discord API channel fetching
+@login_required
+def guilds_channel(request):
 
-    channels = [
+    guilds = request.session.get(
+        "guilds",
+        []
+    )
+
+    if request.method == "POST":
+
+        guild_id = request.POST.get(
+            "guild_id"
+        )
+
+        guild_name = request.POST.get(
+            "guild_name"
+        )
+
+        channel_id = request.POST.get(
+            "channel_id"
+        )
+
+        channel_name = request.POST.get(
+            "channel_name"
+        )
+
+        if channel_id:
+
+            ChannelConfig.objects.get_or_create(
+
+                guild_id=guild_id,
+
+                guild_name=guild_name,
+
+                channel_id=channel_id,
+
+                channel_name=channel_name
+            )
+
+            return redirect("/configs/")
+
+    return render(
+
+        request,
+
+        "guilds.html",
 
         {
-            "id": "1506591836020412589",
-            "name": "test"
+            "guilds": guilds
         }
-
-    ]
-
-    return JsonResponse(
-        channels,
-        safe=False
     )
+# def get_channels(request, guild_id):
+#     # TODO:
+#     # Replace temporary channel mapping
+#     # with real Discord API channel fetching
+#
+#     channels = [
+#
+#         {
+#             "id": "1506591836020412589",
+#             "name": "test"
+#         }
+#
+#     ]
+#
+#     return JsonResponse(
+#         channels,
+#         safe=False
+#     )

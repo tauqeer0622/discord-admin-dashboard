@@ -6,7 +6,7 @@
 <head>
 
     <title>
-        Saved Configurations
+        Discord Command Center
     </title>
 
     <link
@@ -20,151 +20,206 @@
 
     <div class="navbar">
 
-        <a
-            class="nav-link"
-            href="/"
-        >
-            Dashboard
-        </a>
+        <div class="logo">
 
-        <a
-            class="nav-link"
-            href="/configs/"
-        >
-            Configurations
-        </a>
-
-        <a
-            class="nav-link"
-            href="/admin/"
-        >
-            Admin
-        </a>
-        <a
-            class="nav-link"
-            href="/logout/"
-        >
-            Logout
-        </a>
-
-    </div>
-
-    {% if messages %}
-
-        {% for message in messages %}
-
-            <div class="message">
-
-                {{ message }}
-
-            </div>
-
-        {% endfor %}
-
-    {% endif %}
-
-    <h1>
-        Saved Configurations
-    </h1>
-
-    <div class="card">
-
-        {% if configs %}
-
-        <table>
-
-            <tr>
-
-                <th>Guild</th>
-
-                <th>Channel</th>
-
-                <th>Channel ID</th>
-
-                <th>Status</th>
-
-                <th>Actions</th>
-
-            </tr>
-
-            {% for config in configs %}
-
-            <tr>
-
-                <td>
-                    {{ config.guild_name }}
-                </td>
-
-                <td>
-                    {{ config.channel_name }}
-                </td>
-
-                <td>
-                    {{ config.channel_id }}
-                </td>
-
-                <td>
-
-                    {% if config.is_active %}
-
-                        Active
-
-                    {% else %}
-
-                        Disabled
-
-                    {% endif %}
-
-                </td>
-
-                <td>
-
-                    {% if config.is_active %}
-
-                    <a
-                        class="action-btn disable-btn"
-                        href="/toggle-config/{{ config.id }}/"
-                    >
-                        Disable
-                    </a>
-
-                    {% else %}
-
-                    <a
-                        class="action-btn enable-btn"
-                        href="/toggle-config/{{ config.id }}/"
-                    >
-                        Enable
-                    </a>
-
-                    {% endif %}
-
-                    <a
-                        class="action-btn delete-btn"
-                        href="/delete-config/{{ config.id }}/"
-                    >
-                        Delete
-                    </a>
-
-                </td>
-
-            </tr>
-
-            {% endfor %}
-
-        </table>
-
-        {% else %}
-
-        <div class="empty-state">
-
-            No configurations added yet
+            Discord Command Center
 
         </div>
 
-        {% endif %}
+        <div class="nav-items">
+
+            <a
+                href="/"
+                class="nav-link"
+            >
+                Dashboard
+            </a>
+
+            <a
+                href="/configs/"
+                class="nav-link active-link"
+            >
+                Configurations
+            </a>
+
+            <a
+                href="/messages/"
+                class="nav-link"
+            >
+                Messages
+            </a>
+
+            <a
+                href="/admin/"
+                class="nav-link"
+            >
+                Admin
+            </a>
+
+        </div>
 
     </div>
+
+    <div class="container">
+
+        <h1>
+
+            Active Channel Configurations
+
+        </h1>
+
+        <div class="card">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Server
+                        </th>
+
+                        <th>
+                            Channel
+                        </th>
+
+                        <th>
+                            Channel ID
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for config in configs %}
+
+                    <tr>
+
+                        <td>
+                            {{ config.guild_name }}
+                        </td>
+
+                        <td>
+                            {{ config.channel_name }}
+                        </td>
+
+                        <td>
+                            {{ config.channel_id }}
+                        </td>
+
+                        <td>
+
+                            {% if config.is_active %}
+
+                            <span class="status-active">
+
+                                ✓ Active
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="status-inactive">
+
+                                ✕ Inactive
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <div class="action-buttons">
+
+                                <a
+                                    href="/toggle-config/{{ config.id }}/"
+                                >
+
+                                    {% if config.is_active %}
+
+                                    <button
+                                        class="toggle-btn"
+                                    >
+
+                                        ON
+
+                                    </button>
+
+                                    {% else %}
+
+                                    <button
+                                        class="toggle-btn inactive-toggle"
+                                    >
+
+                                        OFF
+
+                                    </button>
+
+                                    {% endif %}
+
+                                </a>
+
+                                <a
+                                    href="/delete-config/{{ config.id }}/"
+                                >
+
+                                    <button
+                                        class="delete-btn"
+                                    >
+
+                                        Delete
+
+                                    </button>
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="5">
+
+                            No configurations added yet.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <footer>
+
+        © 2026 Discord Command Center.
+        All rights reserved.
+
+    </footer>
 
 </body>
 

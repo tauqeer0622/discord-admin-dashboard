@@ -6,7 +6,7 @@
 <head>
 
     <title>
-        Discord Admin Dashboard
+        Discord Command Center
     </title>
 
     <link
@@ -20,102 +20,171 @@
 
     <div class="navbar">
 
-        <a
-            class="nav-link"
-            href="/"
-        >
-            Dashboard
-        </a>
+        <div class="logo">
 
-        <a
-            class="nav-link"
-            href="/configs/"
-        >
-            Configurations
-        </a>
-
-        <a
-            class="nav-link"
-            href="/admin/"
-        >
-            Admin
-        </a>
-
-    </div>
-
-    <h1>
-        Discord Admin Dashboard
-    </h1>
-
-    <div class="stats-grid">
-
-        <div class="stat-card">
-
-            <h2>
-                {{ total_configs }}
-            </h2>
-
-            <p>
-                Total Configurations
-            </p>
+            Discord Command Center
 
         </div>
 
-        <div class="stat-card">
+        <div class="nav-items">
 
-            <h2>
-                {{ active_configs }}
-            </h2>
+            <a
+                href="/"
+                class="nav-link active-link"
+            >
+                Dashboard
+            </a>
 
-            <p>
-                Active Configurations
-            </p>
+            <a
+                href="/configs/"
+                class="nav-link"
+            >
+                Configurations
+            </a>
 
-        </div>
+            <a
+                href="/messages/"
+                class="nav-link"
+            >
+                Messages
+            </a>
 
-        <div class="stat-card">
-
-            <h2>
-                {{ disabled_configs }}
-            </h2>
-
-            <p>
-                Disabled Configurations
-            </p>
+            <a
+                href="/admin/"
+                class="nav-link"
+            >
+                Admin
+            </a>
 
         </div>
 
     </div>
 
-    <div class="card">
+    <div class="container">
 
-        <h2>
-            Quick Actions
-        </h2>
+        <h1>
 
-        <br>
+            Discord Admin Dashboard
 
-        <a href="/login/">
+        </h1>
 
-            <button>
+        <div class="stats-grid">
 
-                Login with Discord
+            <div class="stat-card">
 
-            </button>
+                <div class="stat-number">
 
-        </a>
+                    {{ total_configs }}
 
-        <a href="/configs/">
+                </div>
 
-            <button>
+                <div class="stat-label">
 
-                View Configurations
+                    Total Configurations
 
-            </button>
+                </div>
 
-        </a>
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+
+                    {{ active_configs }}
+
+                </div>
+
+                <div class="stat-label">
+
+                    Active Configurations
+
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+
+                    {{ disabled_configs }}
+
+                </div>
+
+                <div class="stat-label">
+
+                    Disabled Configurations
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card quick-actions-card">
+
+            <h2>
+
+                Quick Actions
+
+            </h2>
+
+            <div class="quick-buttons">
+
+                <a href="/login/">
+
+                    <button>
+
+                        Login with Discord
+
+                    </button>
+
+                </a>
+
+                <a href="/guilds/">
+
+                    <button>
+
+                        Add Configuration
+
+                    </button>
+
+                </a>
+
+                <a href="/configs/">
+
+                    <button>
+
+                        View Configurations
+
+                    </button>
+
+                </a>
+
+                <a
+                    href="https://discord.com/oauth2/authorize?client_id=BOT_CLIENT_ID&permissions=274877975552&scope=bot"
+                    target="_blank"
+                >
+
+                    <button>
+
+                        Invite Bot
+
+                    </button>
+
+                </a>
+
+            </div>
+
+        </div>
 
     </div>
+
+    <footer>
+
+        © 2026 Discord Command Center.
+        All rights reserved.
+
+    </footer>
 
 </body>
 

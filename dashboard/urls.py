@@ -13,7 +13,8 @@ from .views import (
     logout_view,
     message_webhook,
     messages_page,
-    get_channels
+    guilds_channel
+    # get_channels
 )
 
 urlpatterns = [
@@ -83,8 +84,13 @@ urlpatterns = [
         name="messages_page"
     ),
     path(
-        "api/channels/<str:guild_id>/",
-        get_channels,
-        name="get_channels"
+        "guilds/",
+        guilds_channel,
+        name="guilds_channel"
     ),
+    # path(
+    #     "api/channels/<str:guild_id>/",
+    #     get_channels,
+    #     name="get_channels"
+    # ),
     ]
